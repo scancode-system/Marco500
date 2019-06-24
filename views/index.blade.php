@@ -11,7 +11,7 @@
                            <h2>Produtos</h2>                    
                     </div>
                     <div class="pull-right">
-                        <a href="{{ route('marco500.xlsx') }}" class="btn btn-primary pull-right">
+                        <a href="{{ route('marco500.xlsx', ['filial' => $filial, 'data_fechamento' => $data_fechamento]) }}" class="btn btn-primary pull-right">
                             <i class="fa fa-file-excel-o fa-lg"></i>
                         </a>
                     </div>

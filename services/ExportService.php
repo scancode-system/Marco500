@@ -24,6 +24,7 @@ class ExportService {
 		});
 		$produtos = $produtos->paginate(10);
 		$produtos->appends(request()->query());
+
 		
 		$tot_qtd = 0;
 		$tot_total = 0;
