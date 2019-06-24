@@ -7,7 +7,14 @@
 		<div class="col-lg-12">
 			<div class="main-box clearfix">
 				<header class="main-box-header clearfix">
-					<h2>Produtos</h2>
+					<div class="pull-left">
+                           <h2>Produtos</h2>                    
+                    </div>
+                    <div class="pull-right">
+                        <a href="{{ route('marco500.xlsx') }}" class="btn btn-primary pull-right">
+                            <i class="fa fa-file-excel-o fa-lg"></i>
+                        </a>
+                    </div>
 				</header>
 				<div class="main-box-body clearfix">
 					{{ Form::open(['route' => 'marco500', 'method' => 'GET']) }}
@@ -53,10 +60,16 @@
 								</tr>
 								@endforeach                                   
 							</tbody>
+							<tfoot style="font-size: 18px; font-weight: bold;">
+								<tr>
+									<td colspan="3">Totais</td>
+									<td class="text-center">{{ $tot_qtd }}</td>
+									<td class="text-center">R${{ number_format($tot_total, 2, ',', '.') }}</td>
+								</tr>
+							</tfoot>
 						</table>
 					</div>
 					{{ $produtos->links() }}
-
 				</div>
 			</div>
 		</div>
