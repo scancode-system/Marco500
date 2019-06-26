@@ -14,8 +14,12 @@ class Marco500Controller extends BaseController {
 	}
 
 
-	public function xlsx(Request $request, $filial = null, $data_fechamento = null){
-        return response()->download((new ExportService())->xlsx($filial, $data_fechamento))->deleteFileAfterSend(true);
+	public function xlsx(Request $request){
+		$filial = $request->filial;
+		$data_fechamento_antes = $request->data_fechamento_antes;
+		$data_fechamento_depois = $request->data_fechamento_depois;
+
+        return response()->download((new ExportService())->xlsx($filial, $data_fechamento_antes, $data_fechamento_depois))->deleteFileAfterSend(true);
     }
 
 }

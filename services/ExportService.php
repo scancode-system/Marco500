@@ -7,24 +7,25 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class ExportService {
 
-	public function xlsx($filial, $data_fechamento){
+	public function xlsx($filial, $data_fechamento_antes, $data_fechamento_depois){
 		$produtos = Produto::query();
 		if($filial){
 			$produtos->where('filial', $filial);
 		}
 		$produtos->with('pedido_itens', 'pedido_itens.pedido');
-		$produtos->whereHas('pedido_itens', function ($query) use( $data_fechamento) {
-			$query->whereHas('pedido', function ($query2)  use( $data_fechamento){
+		$produtos->whereHas('pedido_itens', function ($query) use( $data_fechamento_antes, $data_fechamento_depois) {
+			$query->whereHas('pedido', function ($query2)  use( $data_fechamento_antes, $data_fechamento_depois){
 				$query2->where('id_status', 2);
-				if($data_fechamento){
-					$query2->where('id_status', 2);
-					$query2->where('data_fechamento', $data_fechamento);
+				if($data_fechamento_antes){
+					$query2->whereDate('data_fechamento', '<=', $data_fechamento_antes);
+				}
+				if($data_fechamento_depois){
+					$query2->whereDate('data_fechamento', '>=', $data_fechamento_depois);
 				}
 			});	
 		});
-		$produtos = $produtos->paginate(10);
-		$produtos->appends(request()->query());
 
+		$produtos = $produtos->get();
 		
 		$tot_qtd = 0;
 		$tot_total = 0;
