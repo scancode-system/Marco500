@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 use App\Models\Produto;
 
-class IndexComposer {
+class ProdutosComposer {
 
 	private $filiais;
 	private $filial;

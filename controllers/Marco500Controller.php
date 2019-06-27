@@ -13,13 +13,27 @@ class Marco500Controller extends BaseController {
 		return view('marco500::index');
 	}
 
+	public function produtos() {
+		return view('marco500::produtos');
+	}
 
-	public function xlsx(Request $request){
+
+	public function produtosXlsx(Request $request){
 		$filial = $request->filial;
 		$data_fechamento_antes = $request->data_fechamento_antes;
 		$data_fechamento_depois = $request->data_fechamento_depois;
 
-        return response()->download((new ExportService())->xlsx($filial, $data_fechamento_antes, $data_fechamento_depois))->deleteFileAfterSend(true);
+        return response()->download((new ExportService())->produtosXlsx($filial, $data_fechamento_antes, $data_fechamento_depois))->deleteFileAfterSend(true);
+    }
+
+    	public function pedidos() {
+		return view('marco500::pedidos');
+	}
+
+
+	public function pedidosXlsx(Request $request){
+		$filial = $request->filial;
+        return response()->download((new ExportService())->pedidosXlsx($filial))->deleteFileAfterSend(true);
     }
 
 }

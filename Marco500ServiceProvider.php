@@ -19,7 +19,8 @@ class Marco500ServiceProvider extends ServiceProvider
             __DIR__.'/views/widgets' => resource_path('views/widgets')
         ]);
 
-        View::composer('marco500::index', 'App\Package\Marco500\composers\IndexComposer');
+        View::composer('marco500::produtos', 'App\Package\Marco500\composers\ProdutosComposer');
+        View::composer('marco500::pedidos', 'App\Package\Marco500\composers\PedidosComposer');
     }
 
     public function register()
