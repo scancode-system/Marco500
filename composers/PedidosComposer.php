@@ -40,7 +40,7 @@ class PedidosComposer {
 	}
 
 	private function totais(){
-		$datas = Pedido::groupBy('data_fechamento')->whereHas('pedido_itens', function ($query) {
+		$datas = Pedido::groupBy('data_fechamento')->where('id_status', 2)->whereHas('pedido_itens', function ($query) {
 			$query->whereHas('produto', function ($query2) {
 				if($this->filial){
 					$query2->where('filial', $this->filial);
@@ -64,7 +64,9 @@ class PedidosComposer {
 			$filiais[$i] = $filial;
 		}
 
-		$pedido_items = PedidoItem::with(['pedido', 'produto', 'pedido.pedido_pagamento'])->get();
+		$pedido_items = PedidoItem::with(['pedido', 'produto', 'pedido.pedido_pagamento'])->whereHas('pedido', function ($query) {
+			$query->where('id_status', 2);
+		})->get();
 
 		foreach ($pedido_items as $pedido_item) {
 			$filial = $pedido_item->produto->filial_descricao;
