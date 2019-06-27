@@ -61,7 +61,7 @@
 									@foreach($datas as $data)
 									<th class="text-center">R${{ number_format($datas_totais->totais[$data], 2, ',', '.') }} </th>
 									@endforeach
-									<<th class="text-center">R${{ number_format($datas_totais->total, 2, ',', '.') }} </th>
+									<th class="text-center">R${{ number_format($datas_totais->total, 2, ',', '.') }} </th>
 								</tr>                                   
 							</tbody>
 						</table>
