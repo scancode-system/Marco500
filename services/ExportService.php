@@ -70,6 +70,11 @@ class ExportService {
 				}
 			});	
 		})->get()->pluck('data_fechamento')->toArray();
+
+		$datas_totais = (object)['total' => 0, 'totais' => []];
+		foreach ($datas as $data) {
+			$datas_totais->totais[$data] = 0;
+		}
 		
 
 		$filiais = Produto::query();
@@ -97,16 +102,19 @@ class ExportService {
 			if(isset($filiais[$filial])){
 				$filiais[$filial]->datas[$pedido_item->pedido->data_fechamento] += $pedido_item->total_liquido;
 				$filiais[$filial]->total += $pedido_item->total_liquido;
+				$datas_totais->totais[$pedido_item->pedido->data_fechamento] += $pedido_item->total_liquido;
+				$datas_totais->total += $pedido_item->total_liquido;
 			}
 		}
 
 		try {
-			Excel::create('Pedidos', function($excel) use($filiais, $datas) {
-				$excel->sheet('Pedidos', function($sheet) use($filiais, $datas) {
+			Excel::create('Pedidos', function($excel) use($filiais, $datas, $datas_totais) {
+				$excel->sheet('Pedidos', function($sheet) use($filiais, $datas, $datas_totais) {
 					$sheet->loadView('marco500::export.xlsx.pedidos', 
 						[
 							'filiais' => $filiais,
 							'datas' => $datas,
+							'datas_totais' => $datas_totais
 						]);
 				});
 			})->store('xlsx', public_path());

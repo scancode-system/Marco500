@@ -16,6 +16,8 @@ class PedidosComposer {
 
 	private $totais;
 	private $datas;
+	private $datas_totais;
+
 
 
 	public function compose(View $view) {
@@ -27,6 +29,7 @@ class PedidosComposer {
 		$view->with('filial', $this->filial);
 		$view->with('totais', $this->totais);
 		$view->with('datas', $this->datas);
+		$view->with('datas_totais', $this->datas_totais);
 		$view->with('data_fechamento_antes', null);
 		$view->with('data_fechamento_depois', null);
 	}
@@ -47,7 +50,13 @@ class PedidosComposer {
 				}
 			});	
 		})->get()->pluck('data_fechamento')->toArray();
-		
+
+
+		$datas_totais = (object)['total' => 0, 'totais' => []];
+		foreach ($datas as $data) {
+			$datas_totais->totais[$data] = 0;
+		}
+
 
 		$filiais = Produto::query();
 		if($this->filial){
@@ -70,15 +79,17 @@ class PedidosComposer {
 
 		foreach ($pedido_items as $pedido_item) {
 			$filial = $pedido_item->produto->filial_descricao;
-
 			if(isset($filiais[$filial])){
 				$filiais[$filial]->datas[$pedido_item->pedido->data_fechamento] += $pedido_item->total_liquido;
 				$filiais[$filial]->total += $pedido_item->total_liquido;
+				$datas_totais->totais[$pedido_item->pedido->data_fechamento] += $pedido_item->total_liquido;
+				$datas_totais->total += $pedido_item->total_liquido;
 			}
 		}
 
 		$this->totais = $filiais;
 		$this->datas = $datas;
+		$this->datas_totais = $datas_totais;
 		
 	}    
 
